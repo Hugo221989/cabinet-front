@@ -1,0 +1,33 @@
+.button-row{
+    text-align: right;
+    margin-top: 5%;
+}
+.buttonCancel{
+    margin-right: 1%;
+    background: gray;
+}
+
+h1{
+    text-align: center;
+}
+
+.iconTableActions{
+    width: 50%;
+}
+
+.actionIcon{
+    color: white;
+    cursor: pointer;
+}
+
+.sectionIcon{
+    transform: translate(-10%, -10%);
+}
+
+.w-column-little{
+    max-width: 10%;
+}
+
+.w-column-big{
+    max-width: 60%;
+}

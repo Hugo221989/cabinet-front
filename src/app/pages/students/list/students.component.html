@@ -1,0 +1,95 @@
+<div>
+  <h1> <mat-icon>list</mat-icon> {{ 'students.list' | translate }}</h1>
+</div>
+<div class="mat-elevation-z8">
+    <mat-table
+    [dataSource]="dataSource"
+    matSort
+    class="tablaDetalle"
+    (matSortChange)="paginator.pageIndex = 0; busquedaOrden($event)"
+    id="tablaTarjetas"
+  >
+    <ng-container matColumnDef="name">
+      <mat-header-cell [ngClass]="'w-column-little'"
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        {{ 'name' | translate }}
+      </mat-header-cell>
+      <mat-cell [ngClass]="'w-column-little'"
+        *matCellDef="let row"
+      >
+        {{ row.name }}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="lastName">
+      <mat-header-cell [ngClass]="'w-column-little'"
+        *matHeaderCellDef
+        mat-sort-header
+      >
+        {{ 'lastName' | translate }}
+      </mat-header-cell>
+      <mat-cell [ngClass]="'w-column-little'"
+        *matCellDef="let row"
+      >
+        {{ row.lastName }}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="birth">
+      <mat-header-cell [ngClass]="'w-column-little'"
+        *matHeaderCellDef
+        mat-sort-header
+      >  
+      {{ 'birth' | translate }}
+      </mat-header-cell>
+      <mat-cell [ngClass]="'w-column-little'"
+        *matCellDef="let row"
+      >
+      <mat-icon>today</mat-icon> {{ row.birth }}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="aditionalInfo">
+        <mat-header-cell [ngClass]="'w-column-big'"
+          *matHeaderCellDef
+          mat-sort-header
+        >  
+        {{ 'aditionalInfo' | translate }}
+        </mat-header-cell>
+        <mat-cell [ngClass]="'w-column-big'"
+          *matCellDef="let row"
+        >
+          {{ row.aditionalInfo | truncateString:[100] }}
+        </mat-cell>
+      </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef [ngClass]="'w-column-little'">
+      {{ 'actions' | translate }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [ngClass]="'w-column-little'">
+      <div class="iconTableActions">
+        <a class="actionIcon" (click)="openDialog(row)"><i class="material-icons iconoHover md-36">delete</i></a>
+        </div>
+        <div class="iconTableActions">
+          <a class="actionIcon" (click)="goToCustomerDetail(row)"><i class="material-icons iconoHover md-36">edit</i></a>
+        </div>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row
+      *matHeaderRowDef="displayedColumns"
+    ></mat-header-row>
+    <mat-row
+      *matRowDef="let row; columns: displayedColumns"
+    ></mat-row>
+  </mat-table>
+  <div class="divNoRegistros" id="divNoRegistros"></div>
+  <mat-paginator
+    [pageSizeOptions]="pageSize"
+    #paginator
+    [length]="totalLength"
+    (page)="changePage($event)"
+  ></mat-paginator>
+  </div>
+
+  <div class="button-row">
+    <button mat-flat-button color="primary" (click)="addNewStudent()" > <mat-icon class="sectionIcon">person_add</mat-icon> {{ 'add.student' | translate }}</button>
+</div>

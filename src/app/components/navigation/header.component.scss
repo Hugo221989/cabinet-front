@@ -1,0 +1,48 @@
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover, a:active{
+    color: lightgray;
+}
+
+.navigation-items{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.selectLanguageDiv{
+    height: 40px;
+}
+.selectLanguageCombo{
+    transform: scale(.75) translate(10%, -25%);
+}
+
+.mainIcon {
+    width: 55px;
+}
+
+.accountLinkIcon{
+    transform: scale(1.5) translate(10%, 15%);
+}
+
+::ng-deep .selectLanguageCombo .mat-form-field-flex{
+    border-radius: 4px 4px 0 0 !important;
+    padding: 0 0.75em 0 .75em !important;
+    border: 1px solid;
+}
+mat-toolbar{
+    border-radius: 3px;
+}
+
+@media(max-width: 959px){
+    mat-toolbar{
+        border-radius: 0px;
+    }
+}

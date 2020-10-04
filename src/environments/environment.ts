@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  //urlAddress: 'http://192.168.99.101:8083/cabinet-manager/'
+  urlAddress: 'http://localhost:8083/'
 };
 
 /*

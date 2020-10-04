@@ -1,1 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { 
+    height: 100%;
+    margin: 0;
+ }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.snackBarStyle {
+    background: #ec21f3;
+    color: white;
+}
+
+.titleContainer{
+    margin-bottom: 2%;
+}
+
+.title{
+    text-align: center;
+}
+
+//CALENDAR
+.cal-month-view .cal-day-number{
+    color: black !important;
+}
+
+.cal-month-view .cal-cell-row{
+    color: black;
+    font-size: 1.25em;
+}
+.cal-month-view .cal-cell-top{
+    min-height: 40px !important;
+}
+.cal-month-view .cal-day-cell {
+    min-height: 40px !important;
+}
+.week-view{
+    color: black !important;
+}
+.day-view{
+    color: black !important;
+}
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';

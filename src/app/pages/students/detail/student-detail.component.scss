@@ -1,0 +1,28 @@
+.button-row{
+    text-align: right;
+    margin-top: 5%;
+}
+.buttonCancel{
+    margin-right: 1%;
+    background: gray;
+}
+
+:host ::ng-deep .mat-form-field{
+    margin-right: 5%;
+}
+
+.textAreaBig{
+    width: 45%;
+}
+
+.input-half-width {
+    width: 50%;
+}
+
+.diagnosisCard{
+    margin-top: 5%;
+}
+
+.sectionIcon{
+    transform: translate(10%, 15%);
+}

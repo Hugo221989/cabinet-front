@@ -1,0 +1,53 @@
+<div>
+
+    <mat-card class="titleContainer">
+        <h1 class="title">{{ studentName }}</h1>
+    </mat-card>
+    <mat-card>
+        <h2> <mat-icon class="sectionIcon">person</mat-icon> {{ 'student.data' | translate }}</h2>
+        <form [formGroup]="studentDataForm">
+            <mat-form-field>
+                <mat-label>{{ 'name' | translate }} *</mat-label>
+                <input matInput placeholder="{{ 'name' | translate }}" formControlName="name">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'lastName' | translate }} *</mat-label>
+                <input matInput placeholder="{{ 'lastName' | translate }}" formControlName="lastName">
+            </mat-form-field>
+            <mat-form-field>   
+                <mat-label>{{ 'birth' | translate }} *</mat-label>
+                <input matInput [matDatepicker]="picker" [formControl]="birthPickerField" id="birthPickerField">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <p></p>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'aditionalInfo' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'aditionalInfo' | translate }}" formControlName="aditionalInfo"
+                    rows="7"></textarea>
+                </mat-form-field>
+            
+        </form>
+    </mat-card>
+
+    <mat-card class="diagnosisCard">
+        <h2> <mat-icon class="sectionIcon">folder_shared</mat-icon> {{ 'diagonosis.data' | translate }}</h2>
+        <form [formGroup]="diagnosisDataForm">
+            <mat-form-field class="input-half-width">
+                <mat-label>{{ 'title' | translate }} *</mat-label>
+                <input matInput placeholder="{{ 'title' | translate }}" formControlName="title">
+            </mat-form-field>
+            <p></p>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'description' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'description' | translate }}" formControlName="description"
+                    rows="7"></textarea>
+                </mat-form-field>
+        </form>
+    </mat-card>
+    <div class="button-row">
+        <button mat-flat-button class="buttonCancel" routerLink="/students/list">{{ 'cancel' | translate }}</button>
+        <button mat-flat-button color="primary" (click)="updateStudentData()"  [disabled]="!studentDataForm.valid" *ngIf="!isNewStudent">{{ 'update' | translate }}</button>
+        <button mat-flat-button color="primary" (click)="saveStudentData()"  [disabled]="!studentDataForm.valid" *ngIf="isNewStudent">{{ 'save' | translate }}</button>
+    </div>
+</div>

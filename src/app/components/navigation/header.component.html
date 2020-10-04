@@ -1,0 +1,40 @@
+<mat-toolbar color="primary">
+    <div fxHide.gt-xs>
+        <button mat-icon-button (click)="onToggleSidenav()">
+            <mat-icon>menu</mat-icon>
+        </button>
+    </div>
+    <div fxFlex fxLayout>
+        <img src="assets/icon/reading.png" class="mainIcon">
+    </div>
+    <div fxFlex="0 1 calc(20%)" fxFlex.lt-md="0 1 calc(50%)" fxLayoutAlign="start" fxLayout>
+        <ul fxLayout class="navigation-items">
+            <li>
+                <a routerLink="/students">Paula's Cabinet</a>
+            </li>
+        </ul>
+    </div>
+    <div fxFlex="0 1 calc(80%)" fxFlex.lt-md="0 1 calc(50%)" fxLayout fxLayoutAlign="end" fxHide.xs>
+        <ul fxFlex="0 1 calc(60%)" fxFlex.lt-md="0 1 calc(100%)" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="10%" class="navigation-items">
+            <li>
+                <div class="selectLanguageDiv">
+                <mat-form-field appearance="fill" class="selectLanguageCombo">
+                    <mat-select [(value)]="currentLanguage" (selectionChange)="setLanguageSelected($event.value)">
+                      <mat-option value="es">{{ 'spanish' | translate }}</mat-option>
+                      <mat-option value="en">{{ 'english' | translate }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+            </li>
+            <li>
+                <a class="pointer" routerLink="/students/list"> {{ 'students' | translate }}</a>
+            </li>
+            <li>
+                <a class="pointer" routerLink="/appointments/list"> {{ 'appointments' | translate }}</a>
+            </li>
+            <li>
+                <a class="pointer" routerLink="/account/profile"> <mat-icon class="accountLinkIcon">account_circle</mat-icon></a>
+            </li>
+        </ul>
+    </div>
+  </mat-toolbar>
