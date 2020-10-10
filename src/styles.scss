@@ -40,5 +40,58 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .day-view{
     color: black !important;
 }
+.primary-button-custom {
+    background-color: #c2185b !important;
+    color: white !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+
+
+.form-field-50{
+width: 50%;
+}
+.form-field-big{
+width: 90%;
+}
+.form-field-date-modal{
+width: 45%;
+}
+.div-modal-dates{
+margin-bottom: 5%;
+margin-left: 0 !important;
+margin-right: 0 !important;
+}
+.button-row{
+    display: block !important;
+    margin-top: 5%;
+    text-align: right;
+}
+.selectStudentModalDiv{
+    height: 40px;
+  }
+  .selectStudentModalCombo{
+    transform: scale(0.85) translate(-5%, 0%);
+    background: #c2185b;
+    width: 15em;
+    height: 3em;
+  }
+  .mat-select-meeting-modal{
+    height: 100%;
+    padding-top: 5%;
+    text-align: center;
+  }
+  ::ng-deep .selectLanguageCombo .mat-form-field-wrapper{
+    padding-bottom: 0 !important;
+  }
+  ::ng-deep .selectLanguageCombo .mat-form-field-underline{
+    display: none !important;
+  }
+  ::ng-deep .selectLanguageCombo .mat-select-value{
+    font-size: 1.25em;
+    text-align: center;
+  }
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';

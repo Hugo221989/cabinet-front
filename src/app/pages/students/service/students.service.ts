@@ -14,7 +14,11 @@ export class StudentsService {
   constructor(private httpClient: HttpClient) { }
 
   public getStudentList(): Observable<any>{
-    return this.httpClient.get<any>(`${URL_STUDENT}all`);
+    return this.httpClient.get<any>(`${URL_STUDENT}allList`);
+  }
+
+  public getStudentPage(): Observable<any>{
+    return this.httpClient.get<any>(`${URL_STUDENT}allPage`);
   }
 
   public getStudentData(id: string): Observable<StudentDto>{

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DiagnosisDto, StudentDto } from 'src/app/models/student';
 import { StudentsService } from '../service/students.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import Utils from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-student-detail',
@@ -89,7 +90,7 @@ export class StudentDetailComponent implements OnInit {
     this.studentDataForm.controls['birth'].setValue(this.studentData.birth);
     let nacimiento = this.studentData.birth;
     if(nacimiento)
-        this.birthPickerField.setValue(this.createDateFromString(nacimiento.toLocaleString()));
+        this.birthPickerField.setValue(Utils.createDateFromString(nacimiento.toLocaleString()));
     else
       this.birthPickerField.setValue(null);
     this.studentDataForm.controls['aditionalInfo'].setValue(this.studentData.aditionalInfo);
@@ -155,13 +156,4 @@ export class StudentDetailComponent implements OnInit {
       panelClass: ['snackBarStyle']
     });
   }
-
-  createDateFromString(dateString: string){
-    const dateArray = dateString.split("/");
-    const year = dateArray[2];
-    const month = dateArray[1];
-    const day = dateArray[0];
-    return new Date(year+'-'+month+'-'+day);
-  }
-
 }

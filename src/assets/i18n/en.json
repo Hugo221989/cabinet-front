@@ -5,10 +5,12 @@
     "aditionalInfo":"Additional Information",
     "actions":"Actions",
     "students":"Students",
+    "student":"Student",
     "appointments":"Appointments",
     "account":"Account",
     "students.list":"Students List",
     "student.data":"Student Data",
+    "add.student":"Añadir Alumno",
     "appointments.list":"Appointments List",
     "spanish":"Spanish",
     "english":"English",
@@ -29,10 +31,13 @@
     "add.new":"Add New",
     "primary.color":"Primary Color",
     "secondary.color":"Secondary Color",
+    "color":"Color",
     "starts.at":"Starts at",
     "ends.at":"Ends at",
     "remove":"Remove",
     "action":"Action",
     "event":"Event",
-    "ok":"Ok"
+    "ok":"Ok",
+    "location":"Location",
+    "info.evento":"Evente Information"
 }

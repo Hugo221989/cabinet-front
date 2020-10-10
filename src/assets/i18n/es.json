@@ -5,10 +5,12 @@
     "aditionalInfo":"Información Adicional",
     "actions":"Acciones",
     "students":"Alumnos",
+    "student":"Alumno",
     "appointments":"Citas",
     "account":"Cuenta",
     "students.list":"Lista de Alumnos",
     "student.data":"Datos del Alumno",
+    "add.student":"Añadir Alumno",
     "appointments.list":"Lista de Citas",
     "spanish":"Español",
     "english":"Inglés",
@@ -28,11 +30,13 @@
     "add.new":"Añadir Nuevo",
     "primary.color":"Color Primario",
     "secondary.color":"Color Secundario",
-    "starts.at":"Empiza en",
+    "color":"Color",
+    "starts.at":"Empieza en",
     "ends.at":"Finaliza en",
     "remove":"Eliminar",
     "action":"Acción",
     "event":"Evento",
-    "ok":"Ok"
-
+    "ok":"Ok",
+    "location":"Ubicación",
+    "info.evento":"Información del evento"
 }

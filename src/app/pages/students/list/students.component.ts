@@ -33,8 +33,8 @@ export class StudentsComponent implements OnInit, OnDestroy {
 
   constructor(private studentService: StudentsService, private router: Router, public translate: TranslateService) { }
 
-  ngOnInit(): void {console.log("ON INIT");
-    this.studentService.getStudentList().subscribe( data => { 
+  ngOnInit(): void {
+    this.studentService.getStudentPage().subscribe( data => { 
       this.studentPage = data;
       this.setTableDataSource();
     })

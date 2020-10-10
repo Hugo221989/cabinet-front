@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>Hi {{data.title}}</h1>
+<div mat-dialog-content>
+  <p>{{ 'info.evento' | translate }}</p>
+  <mat-form-field class="form-field-50">
+    <mat-label>{{ 'title' | translate }}</mat-label>
+    <input matInput [(ngModel)]="meetingDialog.title">
+  </mat-form-field>
+  <p></p>
+  <mat-form-field class="form-field-big">
+    <mat-label>{{ 'description' | translate }}</mat-label>
+    <textarea matInput [(ngModel)]="meetingDialog.meta.description" rows="1" cols="68" id="comment" placeholder="Additional Info" required></textarea>
+  </mat-form-field>
+  <p></p>
+  <mat-form-field class="form-field-50">
+    <mat-label>{{ 'location' | translate }}</mat-label>
+    <input matInput [(ngModel)]="meetingDialog.meta.location">
+  </mat-form-field>
+  <div>
+    <mat-label>{{ 'color' | translate }}</mat-label>
+    <p></p>
+    <input type="color" [(ngModel)]="meetingDialog.color.primary" class="color-square"/>
+    <p></p>
+  </div>
+  <div class="row div-modal-dates">
+    <div class="form-field-date-modal mr-2">
+        <mat-label>{{ 'starts.at' | translate }}</mat-label>
+        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="meetingDialog.start" (ngModelChange)="refresh.next()"
+                [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="dd-mm-YYYY HH:mm" altFormat="d-m-Y H:i" date-time_24hr=true
+                placeholder="Not set" [locale]="locale" required name="start" #start ="ngModel"/>
+    </div>
+    <div class="form-field-date-modal">
+        <mat-label>{{ 'ends.at' | translate }}</mat-label>
+        <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="meetingDialog.end" (ngModelChange)="refresh.next()"
+                [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="dd-mm-YYYY HH:mm" altFormat="d-m-Y H:i" date-time_24hr=true
+                placeholder="Not set" [locale]="locale" required name="end" #end ="ngModel"/>
+    </div>
+  </div>
+  <div class="selectStudentModalDiv">
+    <div class="selectStudentModalCombo">
+     <mat-select [(ngModel)]="meetingDialog.meta.idStudent" required name="studentId" #studentId ="ngModel" class="mat-select-meeting-modal">
+       <mat-option  *ngFor="let student of studentList" [value]="student.id">{{ student.name+' '+student.lastName }}</mat-option>
+     </mat-select>
+    </div>
+</div>
+</div>
+<div mat-dialog-actions class="button-row">
+  <button mat-flat-button class="buttonCancel" (click)="onNoClick()">{{ 'cancel' | translate }}</button>
+  <button mat-flat-button color="primary" (click)="onYesClick()" cdkFocusInitial>{{ 'save' | translate }}</button>
+</div>

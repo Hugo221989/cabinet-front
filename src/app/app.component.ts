@@ -15,7 +15,7 @@ export class AppComponent implements OnInit{
   constructor(public translate: TranslateService,
     private store: Store<{settings: SettingsState}>) { }
 
-    ngOnInit(){console.log("LANG: ",this.translate.currentLang);
+    ngOnInit(){
       this.store.dispatch(actionSettingsCurrentLanguage({
         currentLanguage: this.translate.currentLang
       }))

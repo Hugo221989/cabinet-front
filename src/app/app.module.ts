@@ -19,6 +19,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppointmentsModule } from './pages/appointments/appointments.module';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { settingsReducer } from './reducers/settings.reducer';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+
+registerLocaleData(localeEs);
 
 @NgModule({
   declarations: [

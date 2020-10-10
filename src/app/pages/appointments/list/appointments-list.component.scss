@@ -18,3 +18,80 @@ h3 {
   table >thead {
     color: white;
   }
+  .containerLoadingSpinner{
+    width: 100%;
+    text-align: -webkit-center;
+    height: 200px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+
+  .icon-delete{
+    color: white !important;
+    cursor: pointer;
+    transform: scale(1.3);
+  }
+  .icon-delete-disabled{
+    color: #a79c9c !important;
+    transform: scale(1.3);
+  }
+  .icon-delete:hover{
+    color: #bfbcbc !important;
+  }
+  .div-icons-actions{
+    margin-top: 5%;
+  }
+  .div-icon-left{
+    float: left;
+    margin-right: 2%;
+  }
+  .div-icon-right{
+    float: right;
+  }
+
+  .color-square{
+    min-height: 40px;
+  }
+  .td-title{
+    width: 40%;
+  }
+  
+  .selectLanguageDiv{
+    height: 40px;
+  }
+  .selectLanguageCombo{
+    transform: scale(0.85) translate(0%, -10%);
+    background: #c2185b;
+    width: 15em;
+    height: 3em;
+  }
+  .mat-select{
+    height: 100%;
+    padding-top: 5%;
+  }
+  ::ng-deep .selectLanguageCombo .mat-form-field-wrapper{
+    padding-bottom: 0 !important;
+  }
+  ::ng-deep .selectLanguageCombo .mat-form-field-underline{
+    display: none !important;
+  }
+  ::ng-deep .selectLanguageCombo .mat-select-value{
+    font-size: 1.25em;
+    text-align: center;
+  }
+
+  .active{
+    background-color: #303030 !important;
+    border: 1px solid #98938c;
+  }
+
+  .alert-custom{
+    width: 50% !important;
+  }
+
+  .ng-invalid.ng-touched , .ng-invalid.ng-dirty{
+    border: 3px solid red;
+    background: #f9adad;
+  }

@@ -2,68 +2,43 @@
 <div class="row text-center">
     <div class="col-md-4">
       <div class="btn-group">
-        <div
-          class="btn btn-primary"
-          mwlCalendarPreviousView
-          [view]="view"
-          [(viewDate)]="viewDate"
-          (viewDateChange)="closeOpenMonthViewDay()"
-        >
+        <div class="btn primary-button-custom" mwlCalendarPreviousView [view]="view"
+          [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
         {{ 'previous' | translate }}
         </div>
-        <div
-          class="btn btn-outline-secondary"
-          mwlCalendarToday
-          [(viewDate)]="viewDate"
-        >
+        <div class="btn btn-outline-secondary active" mwlCalendarToday [(viewDate)]="viewDate">
         {{ 'today' | translate }}
         </div>
-        <div
-          class="btn btn-primary"
-          mwlCalendarNextView
-          [view]="view"
-          [(viewDate)]="viewDate"
-          (viewDateChange)="closeOpenMonthViewDay()"
-        >
+        <div class="btn primary-button-custom" mwlCalendarNextView [view]="view"
+          [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
         {{ 'next' | translate }}
         </div>
       </div>
     </div>
     <div class="col-md-4">
-      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale}}</h3>
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale | titlecase}}</h3>
     </div>
     <div class="col-md-4">
       <div class="btn-group">
-        <div
-          class="btn btn-primary"
-          (click)="setView(CalendarView.Month)"
-          [class.active]="view === CalendarView.Month"
-        >
+        <div class="btn primary-button-custom" (click)="setView(CalendarView.Month)" [class.active]="view === CalendarView.Month">
         {{ 'month' | translate }}
         </div>
-        <div
-          class="btn btn-primary"
-          (click)="setView(CalendarView.Week)"
-          [class.active]="view === CalendarView.Week"
-        >
+        <div class="btn primary-button-custom" (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">
         {{ 'week' | translate }}
         </div>
-        <div
-          class="btn btn-primary"
-          (click)="setView(CalendarView.Day)"
-          [class.active]="view === CalendarView.Day"
-        >
+        <div class="btn primary-button-custom" (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">
         {{ 'day' | translate }}
         </div>
       </div>
     </div>
   </div>
   <br />
-  <div [ngSwitch]="view">
+  <div class="containerLoadingSpinner" *ngIf="loadingView"><mat-spinner></mat-spinner></div>
+  <div [ngSwitch]="view" *ngIf="!loadingView">
     <mwl-calendar-month-view
       *ngSwitchCase="CalendarView.Month"
       [viewDate]="viewDate"
-      [events]="events"
+      [events]="appointmentsCalendar"
       [locale]="locale"
       [refresh]="refresh"
       [activeDayIsOpen]="activeDayIsOpen"
@@ -76,7 +51,7 @@
     <mwl-calendar-week-view
       *ngSwitchCase="CalendarView.Week"
       [viewDate]="viewDate"
-      [events]="events"
+      [events]="appointmentsCalendar"
       [locale]="locale"
       [refresh]="refresh"
       (eventClicked)="handleEvent('Clicked', $event.event)"
@@ -88,7 +63,7 @@
     <mwl-calendar-day-view
       *ngSwitchCase="CalendarView.Day"
       [viewDate]="viewDate"
-      [events]="events"
+      [events]="appointmentsCalendar"
       [locale]="locale"
       [refresh]="refresh"
       (eventClicked)="handleEvent('Clicked', $event.event)"
@@ -101,89 +76,78 @@
   <!-- Everything you see below is just for the demo, you don't need to include it in your app -->
   
   <br /><br /><br />
-  
-  <h3>
+
+  <h3 *ngIf="!loadingView">
     {{ 'edit.events' | translate }}
-    <button class="btn btn-primary float-right" (click)="addEvent()">
+    <button  class="btn primary-button-custom float-right" (click)="addEvent()">
         {{ 'add.new' | translate }}
     </button>
     <div class="clearfix"></div>
   </h3>
   
-  <div class="table-responsive">
+  <div class="table-responsive" *ngIf="!loadingView">
     <table class="table table-bordered eventsTable">
       <thead>
         <tr>
           <th>{{ 'title' | translate }}</th>
-          <th>{{ 'primary.color' | translate }}</th>
-          <th>{{ 'secondary.color' | translate }}</th>
+         <!--  <th>{{ 'description' | translate }}</th> -->
+          <th>{{ 'color' | translate }}</th>
+          <!-- <th>{{ 'secondary.color' | translate }}</th> -->
           <th>{{ 'starts.at' | translate }}</th>
           <th>{{ 'ends.at' | translate }}</th>
-          <th>{{ 'remove' | translate }}</th>
+          <th>{{ 'student' | translate }}</th>
+          <th>{{ 'actions' | translate }}</th>
+         <!--  <th>{{ 'Save' | translate }}</th> -->
         </tr>
       </thead>
-  
+
       <tbody>
-        <tr *ngFor="let event of events">
+        <tr *ngFor="let event of appointmentsCalendar">
+          <td class="td-title">
+            <input type="text" class="form-control" [(ngModel)]="event.title" (keyup)="refresh.next()" required minlength="4" name="title" #title ="ngModel"/>
+          </td>
+          <!-- <td>
+            <textarea class="form-control" [(ngModel)]="event.meta" rows="1" cols="68" id="comment" placeholder="Additional Info" required></textarea>
+          </td> -->
           <td>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="event.title"
-              (keyup)="refresh.next()"
-            />
+            <input type="color" [(ngModel)]="event.color.primary" (change)="refresh.next()" class="color-square"/>
           </td>
           <td>
-            <input
-              type="color"
-              [(ngModel)]="event.color.primary"
-              (change)="refresh.next()"
-            />
+            <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="event.start" (ngModelChange)="refresh.next()"
+              [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="dd-mm-YYYY HH:mm" altFormat="d-m-Y H:i" date-time_24hr=true
+              placeholder="Not set" [locale]="locale" required name="start" #start ="ngModel"/>
           </td>
           <td>
-            <input
-              type="color"
-              [(ngModel)]="event.color.secondary"
-              (change)="refresh.next()"
-            />
+            <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="event.end" (ngModelChange)="refresh.next()"
+              [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="dd-mm-YYYY HH:mm" altFormat="d-m-Y H:i" date-time_24hr=true
+              placeholder="Not set" [locale]="locale" required name="end" #end ="ngModel"/>
           </td>
           <td>
-            <input
-              class="form-control"
-              type="text"
-              mwlFlatpickr
-              [(ngModel)]="event.start"
-              (ngModelChange)="refresh.next()"
-              [altInput]="true"
-              [convertModelValue]="true"
-              [enableTime]="true"
-              dateFormat="d-m-YTH:i"
-              altFormat="F j, Y H:i"
-              placeholder="Not set"
-              [locale]="locale"
-            />
+            <div class="selectLanguageDiv">
+                   <div class="selectLanguageCombo">
+                    <mat-select [(ngModel)]="event.meta.idStudent" required name="studentId" #studentId ="ngModel" class="mat-select">
+                      <mat-option  *ngFor="let student of studentList" [value]="student.id">{{ student.name+' '+student.lastName }}</mat-option>
+                    </mat-select>
+                </div>
+            </div>
           </td>
           <td>
-            <input
-              class="form-control"
-              type="text"
-              mwlFlatpickr
-              [(ngModel)]="event.end"
-              (ngModelChange)="refresh.next()"
-              [altInput]="true"
-              [convertModelValue]="true"
-              [enableTime]="true"
-              dateFormat="d-m-YTH:i"
-              altFormat="F j, Y H:i"
-              placeholder="Not set"
-              [locale]="locale"
-            />
+              <div class="div-icons-actions">
+                <div class="div-icon-left">
+                    <a class="actionIcon" (click)="deleteEvent(event)"><i class="material-icons iconoHover md-36 icon-delete">delete</i></a>
+                </div>
+                <div class="div-icon-right">
+                    <a class="actionIcon" (click)="saveEvent(event)" *ngIf="title.valid && studentId.valid"><i class="material-icons iconoHover md-36 icon-delete">save</i></a>
+                    <a class="actionIcon" *ngIf="!title.valid || !studentId.valid"><i class="material-icons md-36 icon-delete-disabled">save</i></a>
+                    <!-- <button mat-flat-button color="primary" (click)="saveEvent(event)" [disabled]="!title.valid"><i class="material-icons iconoHover md-36 icon-delete">save</i></button> -->
+                </div>
+              </div>
           </td>
-          <td>
-            <button class="btn btn-danger" (click)="deleteEvent(event)">
-                {{ 'remove' | translate }}
+          <!-- <td>
+            <button mat-flat-button color="primary" (click)="saveEvent(event)">
+                {{ 'save' | translate }}
             </button>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>
@@ -197,13 +161,17 @@
       </button>
     </div>
     <div class="modal-body">
-      <div>
+      <!-- <div>
         {{ 'action' | translate }}:
         <pre>{{ modalData?.action }}</pre>
-      </div>
+      </div> -->
       <div>
         {{ 'event' | translate }}:
-        <pre>{{ modalData?.event | json }}</pre>
+        <pre>
+            <b>{{ modalData?.event.title}}</b>
+            <b>{{ 'location' | translate }}</b>: <span>{{ modalData?.event.meta}}</span>
+        </pre>
+        <!-- <pre>{{ modalData?.event | json }}</pre> -->
       </div>
     </div>
     <div class="modal-footer">
