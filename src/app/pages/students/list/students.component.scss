@@ -2,6 +2,7 @@
     text-align: right;
     margin-top: 5%;
 }
+
 .buttonCancel{
     margin-right: 1%;
     background: gray;
@@ -30,4 +31,21 @@ h1{
 
 .w-column-big{
     max-width: 60%;
+}
+
+.div-button-search{
+    width: 150%;
+}
+
+.input-search{
+    width: 70%;
+    float: left;
+}
+
+.button-search{
+    float: right;
+}
+
+.icon-export{
+    cursor: pointer;
 }

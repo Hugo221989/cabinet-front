@@ -1,19 +1,9 @@
-<div>
-  <h1> <mat-icon>list</mat-icon> {{ 'students.list' | translate }}</h1>
-</div>
-<div>
-  <mat-form-field>
-    <div class="div-button-search">
-      <div class="input-search">
-        <!-- <mat-label>{{ 'name.or.lastname' | translate }} </mat-label> -->
-        <input matInput placeholder="{{ 'name.or.lastname' | translate }}" [(ngModel)]="textToSearch">
-      </div>
-      <div class="button-search">
-        <button mat-flat-button color="primary" (click)="filterByName()" > <mat-icon class="sectionIcon">search</mat-icon></button>
-      </div>
-    </div>
-</mat-form-field>
-</div>
+<h3>
+    <button  class="btn primary-button-custom float-right" (click)="addEvent()">
+        {{ 'add.new' | translate }}
+    </button>
+    <div class="clearfix"></div>
+  </h3>
 <div class="mat-elevation-z8">
     <mat-table
     [dataSource]="dataSource"
@@ -22,56 +12,69 @@
     (matSortChange)="paginator.pageIndex = 0; busquedaOrden($event)"
     id="tablaTarjetas"
   >
-    <ng-container matColumnDef="name">
+    <ng-container matColumnDef="title">
       <mat-header-cell [ngClass]="'w-column-little'"
         *matHeaderCellDef
         mat-sort-header
       >
-        {{ 'name' | translate }}
+        {{ 'title' | translate }}
       </mat-header-cell>
       <mat-cell [ngClass]="'w-column-little'"
         *matCellDef="let row"
       >
-        {{ row.name }}
+        {{ row.title }}
       </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="lastName">
+    <ng-container matColumnDef="color">
       <mat-header-cell [ngClass]="'w-column-little'"
         *matHeaderCellDef
         mat-sort-header
       >
-        {{ 'lastName' | translate }}
+        {{ 'color' | translate }}
       </mat-header-cell>
       <mat-cell [ngClass]="'w-column-little'"
         *matCellDef="let row"
       >
-        {{ row.lastName }}
+      <input type="color" [value]="row.colorPrimary" class="color-square" disabled />
       </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="birth">
+    <ng-container matColumnDef="start">
       <mat-header-cell [ngClass]="'w-column-little'"
         *matHeaderCellDef
         mat-sort-header
       >  
-      {{ 'birth' | translate }}
+      {{ 'starts.at' | translate }}
       </mat-header-cell>
       <mat-cell [ngClass]="'w-column-little'"
         *matCellDef="let row"
       >
-      <mat-icon>today</mat-icon> {{ row.birth }}
+      {{ row.start }}
       </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="aditionalInfo">
+    <ng-container matColumnDef="end">
         <mat-header-cell [ngClass]="'w-column-big'"
           *matHeaderCellDef
           mat-sort-header
         >  
-        {{ 'aditionalInfo' | translate }}
+        {{ 'ends.at' | translate }}
         </mat-header-cell>
         <mat-cell [ngClass]="'w-column-big'"
           *matCellDef="let row"
         >
-          {{ row.aditionalInfo | truncateString:[100] }}
+          {{ row.end }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="location">
+        <mat-header-cell [ngClass]="'w-column-big'"
+          *matHeaderCellDef
+          mat-sort-header
+        >  
+        {{ 'location' | translate }}
+        </mat-header-cell>
+        <mat-cell [ngClass]="'w-column-big'"
+          *matCellDef="let row"
+        >
+          {{ row.location }}
         </mat-cell>
       </ng-container>
     <ng-container matColumnDef="actions">
@@ -83,7 +86,7 @@
         <a class="actionIcon" (click)="openDialog(row)"><i class="material-icons iconoHover md-36">delete</i></a>
         </div>
         <div class="iconTableActions">
-          <a class="actionIcon" (click)="goToCustomerDetail(row)"><i class="material-icons iconoHover md-36">edit</i></a>
+          <a class="actionIcon" (click)="openMeetingModal(row)"><i class="material-icons iconoHover md-36">edit</i></a>
         </div>
       </mat-cell>
     </ng-container>
@@ -103,17 +106,3 @@
     [pageIndex]="pageIndex"
   ></mat-paginator>
   </div>
-
-  <div class="button-row">
-    <div class="div-button-pdf">
-      <a (click)="listToPdf()" class="icon-export">
-        <img src="assets/icon/pdf.png" class="mainIcon">
-      </a>
-      <a (click)="listToExcel()" class="icon-export">
-        <img src="assets/icon/excel.png" class="mainIcon">
-      </a>
-    </div>
-</div>
-  <div class="button-row">
-    <button mat-flat-button color="primary" (click)="addNewStudent()" > <mat-icon class="sectionIcon">person_add</mat-icon> {{ 'add.student' | translate }}</button>
-</div>

@@ -65,16 +65,13 @@ export default class Helper {
   }
 
     static fillMeetingDto(event: any, datepipe: DatePipe){
-      let title: string = event.title;
-      let titleArray: string[] = title.split(" con ");
-      title = titleArray[0];
       let meetingMetaData: MeetingDto = event.meta;
       let meeting: MeetingDto = {
         id: meetingMetaData.id,
         colorPrimary: event.color.primary,
         colorSecondary: event.color.primary,
-        start: meetingMetaData.start,//datepipe.transform(meetingMetaData.start, 'dd/MM/yyyy HH:mm'),
-        end: meetingMetaData.end,//datepipe.transform(meetingMetaData.end, 'dd/MM/yyyy HH:mm'),
+        start: datepipe.transform(event.start, 'dd/MM/yyyy HH:mm'),
+        end: datepipe.transform(event.end, 'dd/MM/yyyy HH:mm'),
         title: meetingMetaData.title,
         idStudent: meetingMetaData.idStudent,
         description: meetingMetaData.description,

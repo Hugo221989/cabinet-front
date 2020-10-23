@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { StudentsModule } from './pages/students/students.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -21,6 +20,8 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { settingsReducer } from './reducers/settings.reducer';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
+import { authInterceptorProviders } from './interceptors/auth-interceptor';
+import { SettingsEffect } from './settings/settings.effects';
 
 registerLocaleData(localeEs);
 
@@ -45,8 +46,8 @@ registerLocaleData(localeEs);
     StoreModule.forRoot({
       settingsState: settingsReducer
     }),
+    EffectsModule.forRoot([SettingsEffect]),
     StoreDevtoolsModule.instrument({ maxAge: 25}),
-    EffectsModule.forRoot([]),
     FlatpickrModule.forRoot(),
     I18nModule,
     //CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
@@ -59,7 +60,9 @@ registerLocaleData(localeEs);
     FlexLayoutModule,
     I18nModule
   ],
-  providers: [],
+  providers: [
+    authInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

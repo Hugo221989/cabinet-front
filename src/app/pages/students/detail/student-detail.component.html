@@ -45,6 +45,17 @@
                 </mat-form-field>
         </form>
     </mat-card>
+
+    <mat-card class="diagnosisCard">
+        <h2> <mat-icon class="sectionIcon">folder_shared</mat-icon> {{ 'appointments' | translate }}</h2>
+        <app-student-meeting-table [studentId]="studentId"></app-student-meeting-table>
+    </mat-card>
+
+    <div class="button-row">
+        <div class="div-button-pdf">
+            <button mat-flat-button color="accent" (click)="listToPdf()" > <mat-icon class="sectionIcon">picture_as_pdf</mat-icon> {{ 'pdf' | translate }}</button>
+          </div>
+    </div>
     <div class="button-row">
         <button mat-flat-button class="buttonCancel" routerLink="/students/list">{{ 'cancel' | translate }}</button>
         <button mat-flat-button color="primary" (click)="updateStudentData()"  [disabled]="!studentDataForm.valid" *ngIf="!isNewStudent">{{ 'update' | translate }}</button>

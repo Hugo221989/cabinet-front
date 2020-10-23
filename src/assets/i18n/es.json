@@ -1,5 +1,6 @@
 {
     "name":"Nombre",
+    "name.or.lastname":"Nombre o apellido",
     "lastName":"Apellido",
     "birth":"Nacimiento",
     "aditionalInfo":"Información Adicional",
@@ -38,5 +39,23 @@
     "event":"Evento",
     "ok":"Ok",
     "location":"Ubicación",
-    "info.evento":"Información del evento"
+    "info.evento":"Información del evento",
+    "login":"Iniciar Sesión",
+    "username.password.incorrect":"Usuario o contraseña incorrecto",
+    "provide.correct.email":"Por favor, proporcione un email válido",
+    "provide.correct.password":"Por favor, proporcione una contraseña válida",
+    "remember.login":"Recordar Login",
+    "email.sended":"Se ha enviado un email para activar tu cuenta a tu correo",
+    "register":"Registrarse",
+    "email.already.exist":"El email ya existe",
+    "password.must.match":"Las contraseñas deben coincidir",
+    "password.format":"Contraseña (8 dígitos, 1 mayúscula y 1 minúscula)",
+    "o":"o",
+    "email":"Email",
+    "email.no.valid":"Formato del email no válido",
+    "password":"Contraseña",
+    "confirm.password":"Confirmar Contraseña",
+    "username":"Nombre de Usuario",
+    "username.no.valid":"Nombre de usuario no válido",
+    "pdf":"Pdf"
 }

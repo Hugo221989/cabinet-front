@@ -19,4 +19,14 @@ export default class Utils {
         const hourPart = dateArray[1];
         return hourPart;
       }
+
+      static ConvertStringToNumber(input: string) { 
+    
+        if (!input) return NaN;
+    
+        if (input.trim().length==0) { 
+            return NaN;
+        }
+        return Number(input);
+    }
 }

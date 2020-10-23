@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DiagnosisDto, StudentDto } from 'src/app/models/student';
 import { StudentsService } from '../service/students.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Utils from 'src/app/utils/utils';
+import { StudentMeetingTableComponent } from '../student-meeting-table/student-meeting-table.component';
+
+const STUDENTS_LIST_PATH = '/students/list';
 
 @Component({
   selector: 'app-student-detail',
@@ -16,12 +19,14 @@ export class StudentDetailComponent implements OnInit {
 
   public studentDataForm: FormGroup;
   public diagnosisDataForm: FormGroup;
-  private studentId: string;
+  public studentId: string;
   public studentData: StudentDto;
   public studentName: string;
   public birthPickerField = new FormControl(new Date());
   public diagnosisData: DiagnosisDto;
   public isNewStudent: boolean = false;
+  
+  //@ViewChild(StudentMeetingTableComponent, {static: true}) meetingTable: StudentMeetingTableComponent;
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -147,6 +152,9 @@ export class StudentDetailComponent implements OnInit {
       let status = data.status;
       if(status != 200 && status != 204)this.openMessageAfterUpdate('Error al guardar los datos', '');
       else this.openMessageAfterUpdate('Cambios guardados correctamente', '');
+      setTimeout(() => {
+        this.router.navigate([STUDENTS_LIST_PATH])
+      }, 2000);
     }
   }
 
@@ -156,4 +164,9 @@ export class StudentDetailComponent implements OnInit {
       panelClass: ['snackBarStyle']
     });
   }
+
+  listToPdf(){
+    
+  }
+  
 }

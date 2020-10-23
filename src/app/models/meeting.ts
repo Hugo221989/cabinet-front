@@ -15,3 +15,10 @@ export class MeetingDto {
 export class MeetingListDto {
     meetingList: MeetingDto[];
 }
+
+export class MeetingsPage {
+    content: MeetingDto[] = [];
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}

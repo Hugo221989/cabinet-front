@@ -31,3 +31,9 @@ export class Page {
 export class StudentListDto {
     studentList: StudentDto[];
 }
+
+export class Filters {
+    currentPage: number;
+    pageSize: number;
+    textToSearch: string;
+}

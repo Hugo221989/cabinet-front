@@ -8,3 +8,8 @@ export const selectSettingsCurrentLanguage= createSelector(
     selectSettings,
     (state: SettingsState) => state.currentLanguage
 )
+
+export const selectSettingsisAuthenticated= createSelector(
+    selectSettings,
+    (state: SettingsState) => state.isAuthenticated
+)

@@ -3,7 +3,7 @@
   <p>{{ 'info.evento' | translate }}</p>
   <mat-form-field class="form-field-50">
     <mat-label>{{ 'title' | translate }}</mat-label>
-    <input matInput [(ngModel)]="meetingDialog.title">
+    <input matInput [(ngModel)]="meetingDialog.meta.title">
   </mat-form-field>
   <p></p>
   <mat-form-field class="form-field-big">
@@ -35,7 +35,7 @@
                 placeholder="Not set" [locale]="locale" required name="end" #end ="ngModel"/>
     </div>
   </div>
-  <div class="selectStudentModalDiv">
+  <div class="selectStudentModalDiv" *ngIf="studentList != null">
     <div class="selectStudentModalCombo">
      <mat-select [(ngModel)]="meetingDialog.meta.idStudent" required name="studentId" #studentId ="ngModel" class="mat-select-meeting-modal">
        <mat-option  *ngFor="let student of studentList" [value]="student.id">{{ student.name+' '+student.lastName }}</mat-option>

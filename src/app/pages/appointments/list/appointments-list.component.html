@@ -86,30 +86,24 @@
   </h3>
   
   <div class="table-responsive" *ngIf="!loadingView">
-    <table class="table table-bordered eventsTable">
+    <table class="table table-bordered eventsTable fixed_header">
       <thead>
         <tr>
-          <th>{{ 'title' | translate }}</th>
-         <!--  <th>{{ 'description' | translate }}</th> -->
-          <th>{{ 'color' | translate }}</th>
-          <!-- <th>{{ 'secondary.color' | translate }}</th> -->
+          <th class="td-title">{{ 'title' | translate }}</th>
+          <th class="td-color">{{ 'color' | translate }}</th>
           <th>{{ 'starts.at' | translate }}</th>
           <th>{{ 'ends.at' | translate }}</th>
           <th>{{ 'student' | translate }}</th>
           <th>{{ 'actions' | translate }}</th>
-         <!--  <th>{{ 'Save' | translate }}</th> -->
         </tr>
       </thead>
 
       <tbody>
         <tr *ngFor="let event of appointmentsCalendar">
           <td class="td-title">
-            <input type="text" class="form-control" [(ngModel)]="event.title" (keyup)="refresh.next()" required minlength="4" name="title" #title ="ngModel"/>
+            <input type="text" class="form-control" [(ngModel)]="event.meta.title" (keyup)="refresh.next()" required minlength="4" name="title" #title ="ngModel"/>
           </td>
-          <!-- <td>
-            <textarea class="form-control" [(ngModel)]="event.meta" rows="1" cols="68" id="comment" placeholder="Additional Info" required></textarea>
-          </td> -->
-          <td>
+          <td class="td-color">
             <input type="color" [(ngModel)]="event.color.primary" (change)="refresh.next()" class="color-square"/>
           </td>
           <td>
@@ -139,15 +133,9 @@
                 <div class="div-icon-right">
                     <a class="actionIcon" (click)="saveEvent(event)" *ngIf="title.valid && studentId.valid"><i class="material-icons iconoHover md-36 icon-delete">save</i></a>
                     <a class="actionIcon" *ngIf="!title.valid || !studentId.valid"><i class="material-icons md-36 icon-delete-disabled">save</i></a>
-                    <!-- <button mat-flat-button color="primary" (click)="saveEvent(event)" [disabled]="!title.valid"><i class="material-icons iconoHover md-36 icon-delete">save</i></button> -->
                 </div>
               </div>
           </td>
-          <!-- <td>
-            <button mat-flat-button color="primary" (click)="saveEvent(event)">
-                {{ 'save' | translate }}
-            </button>
-          </td> -->
         </tr>
       </tbody>
     </table>

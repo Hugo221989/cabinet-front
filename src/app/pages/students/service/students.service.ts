@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StudentDto, StudentListDto, StudentsPage } from 'src/app/models/student';
@@ -17,8 +17,9 @@ export class StudentsService {
     return this.httpClient.get<any>(`${URL_STUDENT}allList`);
   }
 
-  public getStudentPage(): Observable<any>{
-    return this.httpClient.get<any>(`${URL_STUDENT}allPage`);
+  public getStudentPage(page: number, size: number, textToSearch: string): Observable<any>{
+    let params: string = '?page='+page+'&size='+size+'&textToSearch='+textToSearch;
+    return this.httpClient.get<any>(`${URL_STUDENT}allPage${params}`);
   }
 
   public getStudentData(id: string): Observable<StudentDto>{
@@ -39,6 +40,16 @@ export class StudentsService {
 
   public deleteStudent(id: number): Observable<StudentDto>{
     return this.httpClient.delete<StudentDto>(`${URL_STUDENT}?id=${id}`);
+  }
+
+  public getExcel(): Observable<any> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpClient.get(`http://localhost:8085/export/getStudentInfoExcel?studentId=1`, { headers, responseType: 'blob' as 'json'});
+  }
+
+  public getPdf(): Observable<any> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpClient.get(`http://localhost:8085/export/getStudentInfoPdf?studentId=1`, { headers, responseType: 'blob' as 'json'});
   }
 
 }

@@ -21,6 +21,11 @@ export class AppointmentsService {
     return this.httpClient.get<MeetingListDto>(`${URL_MEETING}getAllMeetingsByStudentId/?studentId=${studentId}`);
   }
 
+  public getAllMeetingsByStudentIdPage(page: number, size: number, textToSearch: string, studentId: string): Observable<any>{
+    let params: string = '?page='+page+'&size='+size+'&textToSearch='+textToSearch+'&studentId='+studentId;
+    return this.httpClient.get<any>(`${URL_MEETING}getAllMeetingsByStudentIdPage${params}`);
+  }
+
   public getMeetingData(id: number): Observable<MeetingDto>{
     return this.httpClient.get<MeetingDto>(`${URL_MEETING}?id=${id}`);
   }

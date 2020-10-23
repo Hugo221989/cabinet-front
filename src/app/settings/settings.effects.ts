@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { actionSettingsCurrentLanguage } from "./settings.actions";
+import { actionSettingsCurrentLanguage, actionSettingsIsAuthenticated } from "./settings.actions";
 import { map, withLatestFrom, tap } from "rxjs/operators";
 import { Store, select } from "@ngrx/store";
 import { SettingsState } from "./settings.models";
-import { selectSettingsCurrentLanguage } from './settings.selectors';
+import { selectSettingsCurrentLanguage, selectSettingsisAuthenticated } from './settings.selectors';
 
 
 export const SETTINGS_KEY = 'settingsState';
@@ -22,9 +22,20 @@ export class SettingsEffect{
                 withLatestFrom(this.store.pipe(select(selectSettingsCurrentLanguage))),
                 tap(([action, settings]) =>{
                     window.sessionStorage.setItem('currentLanguage', JSON.stringify(settings))
-                     //localStorage.setItem('authenticated', JSON.stringify(settings))
                 }
                 )
     ),{ dispatch: false }
-    )
+    );
+
+    persistSettingsIsAuthenticathed$ = createEffect(() => 
+        this.actions$.pipe(
+                ofType(actionSettingsIsAuthenticated),
+                withLatestFrom(this.store.pipe(select(selectSettingsisAuthenticated))),
+                tap(([action, settings]) =>{ console.log("EFFECT AUTH: ",action.isAuthenticated);
+                    //if(!action.isAuthenticated)
+                        //window.sessionStorage.clear();
+                }
+                )
+    ),{ dispatch: false }
+    );
 }

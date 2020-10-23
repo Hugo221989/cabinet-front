@@ -1,0 +1,36 @@
+<mat-card>
+      <mat-card-content>
+        <form [formGroup]="loginform" (ngSubmit)="onSubmit()">
+          <h2>{{ 'login' | translate }}</h2>
+          <mat-error *ngIf="isIncorrectLoginCredentials">
+            {{ 'username.password.incorrect' | translate }}
+          </mat-error>
+          <mat-form-field class="full-width-input login-form">
+            <input matInput placeholder="{{ 'username' | translate }}" formControlName="username" required>
+            <mat-error>
+                {{ 'username.no.valid' | translate }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width-input login-form">
+            <input matInput type="password" placeholder="Password" formControlName="password" required>
+            <mat-error>
+                {{ 'provide.correct.password' | translate }}
+            </mat-error>
+          </mat-form-field>
+          <div class="div-remember-login login-form">
+             <input type="checkbox" class="example-margin" formControlName="rememberLogin" />{{ 'remember.login' | translate }}
+          </div>
+          <div class="">
+              <div>
+                <button mat-flat-button color="primary">{{ 'login' | translate }}</button>
+              </div>
+              <div>
+                {{ 'o' | translate }}
+              </div>
+              <div>
+                <a class="link-white" (click)="goToRegister()">{{ 'register' | translate }}</a>
+              </div>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>

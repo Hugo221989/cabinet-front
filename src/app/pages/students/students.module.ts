@@ -19,11 +19,14 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { StudentMeetingTableComponent } from './student-meeting-table/student-meeting-table.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     StudentsComponent,
-    StudentDetailComponent
+    StudentDetailComponent,
+    StudentMeetingTableComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +47,8 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
     MatSnackBarModule,
     MatIconModule,
     TranslateModule,
-    PipesModule
+    PipesModule,
+    MatDialogModule
   ],
   providers: [
     MatDatepickerModule,

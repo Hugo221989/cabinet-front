@@ -158,7 +158,18 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
         },
         draggable: true,
         actions: this.actions,
-        meta: ''
+        meta: {
+          title: '',
+          start: '',
+          end: '',
+          colorPrimary: '#000000',
+          colorSecondary: '#000000',
+          description: '',
+          location: '',
+          mode: false,
+          idStudent: 1,
+          studentName: '',
+        }
       },
     ];
   }
@@ -200,6 +211,10 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
   }
 
   deleteEvent(eventToDelete: CalendarEvent) {
+    if(null == eventToDelete.id){
+      this.appointmentsCalendar = this.appointmentsCalendar.filter((event) => event !== eventToDelete);
+      return;
+    }
     this.appointmentsService.deleteStudentMeeting(eventToDelete.id).subscribe(data =>{
       this.getMessageAfterDelete(data, eventToDelete);
     },error => this.openMessageAlert('Error al eliminar el evento', ''));
@@ -232,7 +247,7 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
     window.localStorage.setItem("initialMeetingEvent", JSON.stringify(selectedMeetingCalendarEvent));
     const dialogRef = this.dialog.open(MeetingFormDialog, {
       width: '50%', 
-      data: {meetingEvent: selectedMeetingCalendarEvent, refresh: this.refresh, local: this.locale, studentList: this.studentList} 
+      data: {meetingEvent: selectedMeetingCalendarEvent, refresh: this.refresh, locale: this.locale, studentList: this.studentList} 
     });
 
     dialogRef.afterClosed().subscribe(result => {
