@@ -16,9 +16,9 @@ export class StudentDto {
 export class StudentsPage {
     content: StudentDto[] = [];
     totalElements: number;
-    totalPages: number;
-    number: number;
-    numberOfElements: number;
+    totalPages?: number;
+    number?: number;
+    numberOfElements?: number;
 }
 
 export class Page {

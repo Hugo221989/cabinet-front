@@ -20,10 +20,26 @@ export class AuthGuardGuard implements CanActivate {
     private tokenStorageService: TokenStorageService,
     private router: Router) { } 
     
-  canActivate(
+/*   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> {
       this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+        this.store.dispatch(actionSettingsIsAuthenticated({
+          isAuthenticated: true
+        }))
+      }else{
+        this.tokenStorageService.signOut();
+        this.router.navigate([LOGIN_PATH]);
+      }
+      return this.store.pipe(select(selectSettingsisAuthenticated));
+  } */
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> {
+      this.isLoggedIn = true;
 
     if (this.isLoggedIn) {
         this.store.dispatch(actionSettingsIsAuthenticated({

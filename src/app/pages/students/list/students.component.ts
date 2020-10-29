@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit,  } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit,  } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { StudentDto, StudentListDto, StudentsPage, Filters } from 'src/app/models/student';
+import { StudentsReactiveService } from '../service/students-reactive.service';
 import { StudentsService } from '../service/students.service';
 
 const STUDENT_DETAIL_PATH = '/student/detail';
@@ -32,7 +33,10 @@ export class StudentsComponent implements OnInit, OnDestroy {
 
   //@ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private studentService: StudentsService, private router: Router, public translate: TranslateService) { }
+  constructor(private studentService: StudentsReactiveService, 
+    private router: Router, 
+    public translate: TranslateService, 
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
   this.getFiltersFromStorage();
@@ -48,6 +52,7 @@ export class StudentsComponent implements OnInit, OnDestroy {
     this.studentService.getStudentPage(this.currentPage, this.pageSizeSelected, this.textToSearch).subscribe( data => { 
       this.studentPage = data;
       this.setTableDataSource();   
+      this.cdr.detectChanges();
     });
   }
 
@@ -117,16 +122,16 @@ export class StudentsComponent implements OnInit, OnDestroy {
 
   listToPdf(){
     const fileName = `reporte_${Math.random()}.pdf`;
-    this.studentService.getPdf().subscribe(response => {
+    /* this.studentService.getPdf().subscribe(response => {
       this.manageExcelFile(response, fileName);
-    });
+    }); */
   }
 
   listToExcel(){
     const fileName = `reporte_${Math.random()}.xlsx`;
-    this.studentService.getExcel().subscribe(response => {
+    /* this.studentService.getExcel().subscribe(response => {
       this.manageExcelFile(response, fileName);
-    });
+    }); */
   }
 
   manageExcelFile(response: any, fileName: string): void {

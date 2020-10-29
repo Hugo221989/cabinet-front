@@ -1,4 +1,4 @@
-import { Component, ViewChild, TemplateRef, OnInit, OnDestroy} from '@angular/core';
+import { Component, ViewChild, TemplateRef, OnInit, OnDestroy, ChangeDetectorRef} from '@angular/core';
 import { startOfDay, endOfDay,isSameDay, isSameMonth,} from 'date-fns';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -21,6 +21,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { MeetingFormDialog } from '../meeting-form-dialog/meeting-form-dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { StudentsReactiveService } from '../../students/service/students-reactive.service';
 
 @Component({
   selector: 'app-appointments-list',
@@ -91,10 +92,11 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
               private store: Store<{settings: SettingsState}>,
               private router: Router,
               private appointmentsService: AppointmentsService,
-              private studentsService: StudentsService,
+              private studentsService: StudentsReactiveService,
               private _snackBar: MatSnackBar,
               public datepipe: DatePipe,
-              public dialog: MatDialog) {}
+              public dialog: MatDialog,
+              private cdr: ChangeDetectorRef) {}
 
   getAllApointments() {
     this.appointmentsService.getAllMeetings().subscribe( data => {
