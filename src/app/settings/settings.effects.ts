@@ -5,14 +5,18 @@ import { map, withLatestFrom, tap } from "rxjs/operators";
 import { Store, select } from "@ngrx/store";
 import { SettingsState } from "./settings.models";
 import { selectSettingsCurrentLanguage, selectSettingsisAuthenticated } from './settings.selectors';
+import { Router } from '@angular/router';
 
 
 export const SETTINGS_KEY = 'settingsState';
 
+const LOGIN_PATH = '/login';
+
 @Injectable()
 export class SettingsEffect{
     constructor(private actions$: Actions,
-                private store: Store<{settings: SettingsState}>){
+                private store: Store<{settings: SettingsState}>, 
+                private router: Router){
 
     }
 
@@ -32,8 +36,10 @@ export class SettingsEffect{
                 ofType(actionSettingsIsAuthenticated),
                 withLatestFrom(this.store.pipe(select(selectSettingsisAuthenticated))),
                 tap(([action, settings]) =>{ console.log("EFFECT AUTH: ",action.isAuthenticated);
-                    //if(!action.isAuthenticated)
-                        //window.sessionStorage.clear();
+                    if(!action.isAuthenticated){
+                        window.sessionStorage.clear();
+                        this.router.navigate([LOGIN_PATH])
+                    }
                 }
                 )
     ),{ dispatch: false }
