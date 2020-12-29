@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private tokenStorageService: TokenStorageService,
     private store: Store<{settings: SettingsState}>) { }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler) {console.log("INTERCEPT");
+  intercept(req: HttpRequest<any>, next: HttpHandler) {
     let authReq = req;
     const token = this.tokenStorageService.getToken();
     if (token != null) {
@@ -26,7 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   handleResposeError = (error: HttpErrorResponse) => {
     console.log(error);
-    if(error.error.status != null && error.error.status == 401){console.log("401");
+    if(error.error.status != null && error.error.status == 401){
     this.store.dispatch(actionSettingsIsAuthenticated({
       isAuthenticated: false
     }))

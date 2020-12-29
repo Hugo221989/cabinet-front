@@ -57,5 +57,7 @@
     "confirm.password":"Confirmar Contraseña",
     "username":"Nombre de Usuario",
     "username.no.valid":"Nombre de usuario no válido",
-    "pdf":"Pdf"
+    "pdf":"Pdf",
+    "eliminar.cita":"Eliminar cita",
+    "deseas.eliminar.cita":"¿Deseas eliminar la cita?"
 }

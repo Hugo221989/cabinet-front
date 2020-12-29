@@ -5,7 +5,9 @@
 export const environment = {
   production: false,
   //urlAddress: 'http://192.168.99.101:8083/cabinet-manager/'
-  urlAddress: 'http://localhost:8087/'
+  urlAddress: 'http://localhost:8087/',
+  urlAddressAppointments: 'http://localhost:8088/',
+  urlHandler: 'http://localhost:8088/appointmentHandler/'
 };
 
 /*

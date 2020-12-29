@@ -13,7 +13,7 @@ const routes: Routes = [
   loadChildren: async () => (await import('./pages/login/login.module')).LoginModule,},
   { path: 'account', 
   loadChildren: async () => (await import('./pages/account/account.module')).AccountModule,canActivate: [AuthGuardGuard]},
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: '', redirectTo: 'appointments', pathMatch: 'full' }
 ];
 
 @NgModule({

@@ -10,8 +10,10 @@ import { Subject, Subscription } from 'rxjs';
 import { MeetingsPage, MeetingDto } from 'src/app/models/meeting';
 import Utils from 'src/app/utils/utils';
 import Helper from '../../appointments/list/appointments-list-helper';
-import { MeetingFormDialog } from '../../appointments/meeting-form-dialog/meeting-form-dialog';
+import { AppointmentReactiveService } from '../../appointments/service/appointment-reactive.service';
+import { AppointmentWebsocketService } from '../../appointments/service/appointment-websocket.service';
 import { AppointmentsService } from '../../appointments/service/appointments.service';
+import { MeetingFormDialog } from '../../form-dialog/meeting-form-dialog/meeting-form-dialog';
 
 const STUDENT_DETAIL_PATH = '/student/detail';
 
@@ -21,7 +23,8 @@ const STUDENT_DETAIL_PATH = '/student/detail';
   styleUrls: ['./student-meeting-table.component.scss'],
   providers: [
     DatePipe
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StudentMeetingTableComponent implements OnInit {
 
@@ -40,24 +43,33 @@ export class StudentMeetingTableComponent implements OnInit {
   @Input() studentId: string;
   public locale: string = this.translate.currentLang;
 
-  constructor(private appointmentsService: AppointmentsService, private router: Router, private route: ActivatedRoute, public translate: TranslateService, 
-    private cd: ChangeDetectorRef, public dialog: MatDialog, private _snackBar: MatSnackBar, public datepipe: DatePipe) { }
+  constructor(private appointmentsService: AppointmentsService, 
+    private appointmentReactiveService: AppointmentReactiveService,
+    private appointmentWebsocketService: AppointmentWebsocketService,
+    private router: Router, 
+    private route: ActivatedRoute, 
+    public translate: TranslateService, 
+    public dialog: MatDialog, 
+    private _snackBar: MatSnackBar, 
+    public datepipe: DatePipe,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getAppointmentsPage();
   }
 
   getAppointmentsPage(){
-    this.appointmentsService.getAllMeetingsByStudentIdPage(this.currentPage, this.pageSizeSelected, this.textToSearch, this.studentId).subscribe( data => { 
+    this.appointmentReactiveService.getAllMeetingsByStudentIdPage(this.currentPage, this.pageSizeSelected, this.textToSearch, this.studentId).subscribe( data => { 
       this.meetingsPage = data;
       this.setTableDataSource();   
+      this.cdr.detectChanges();
     });
   }
 
   setTableDataSource(){
     this.dataSource = new MatTableDataSource(this.meetingsPage.content);
     this.totalLength = this.meetingsPage.totalElements;
-    this.cd.markForCheck();
+    //this.cdr.markForCheck();
   }
 
 
@@ -91,42 +103,40 @@ export class StudentMeetingTableComponent implements OnInit {
   }
 
   openMeetingModal(selectedMeeting: MeetingDto){
+    //this.cdr.detach();
     let refresh: Subject<any> = new Subject();
     let selectedMeetingCalendarEvent: CalendarEvent = Helper.fillSingleApointmentCalendar(selectedMeeting, null);
     const dialogRef = this.dialog.open(MeetingFormDialog, {
       width: '50%', 
       data: {meetingEvent: selectedMeetingCalendarEvent, refresh: refresh, locale: this.locale, studentList: null} 
     });
+    this.cdr.detectChanges();
+    console.log("OpenDialog");
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscription.push(dialogRef.afterClosed().subscribe(result => {
+      //this.cdr.reattach();
       if(result){
         selectedMeetingCalendarEvent = dialogRef.componentInstance.meetingDialog;
         this.saveEvent(selectedMeetingCalendarEvent);
       }
-    });
+    }));
   }
 
   saveEvent(event: any){
     let meeting: MeetingDto = Helper.fillMeetingDto(event, this.datepipe);
-    if(meeting.id != null && meeting.id != undefined){
+    if(meeting.id != null && meeting.id != undefined){console.log("update meeting table");
       this.updateEvent(meeting);
-    }else{
+    }else{console.log("save meeting table");
       this.createEvent(meeting);
     }
   }
 
-  updateEvent(meeting: MeetingDto){
-    this.appointmentsService.updateStudentMeeeting(meeting).subscribe(data =>{
-      this.getMessageAfterSave(data);
-      this.getAppointmentsPage();
-    },error => this.openMessageAlert('Error al actualizar el evento', ''));
+  updateEvent(appointment: MeetingDto){
+    this.appointmentWebsocketService.updateStudentMeeeting(appointment);
   }
 
-  createEvent(meeting: MeetingDto){ 
-    this.appointmentsService.createStudentMeeting(meeting).subscribe(data =>{
-      this.getMessageAfterSave(data);
-      this.getAppointmentsPage();
-    },error => this.openMessageAlert('Error al crear el evento', ''));
+  createEvent(appointment: MeetingDto){ 
+    this.appointmentWebsocketService.createStudentMeeting(appointment);
   }
 
   getMessageAfterSave(data: any){
@@ -145,7 +155,7 @@ export class StudentMeetingTableComponent implements OnInit {
   }
 
   deleteEvent(eventToDelete: CalendarEvent) {
-    this.appointmentsService.deleteStudentMeeting(eventToDelete.id).subscribe(data =>{
+    this.appointmentReactiveService.deleteStudentMeeting(eventToDelete.id).subscribe(data =>{
       this.getMessageAfterDelete(data, eventToDelete);
     },error => this.openMessageAlert('Error al eliminar el evento', ''));
   }

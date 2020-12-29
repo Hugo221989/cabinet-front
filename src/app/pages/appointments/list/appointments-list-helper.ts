@@ -5,12 +5,12 @@ import Utils from 'src/app/utils/utils';
 
 
 export default class Helper {
-    static fillApointmentsCalendar(meetings: MeetingListDto, appointmentsCalendar: CalendarEvent[], actionsEvent: CalendarEventAction[]){
-        for(let meeting of meetings.meetingList){
+    static fillApointmentsCalendar(meeting: MeetingDto, appointmentsCalendar: CalendarEvent[], actionsEvent: CalendarEventAction[]){
+        if(meeting.id != null){
             let colorEvent: any = {
               "primary": meeting.colorPrimary,
               "secondary": meeting.colorSecondary
-            };
+            }; console.log("Lista Date: "+meeting.start); 
             let appointmentCalendar: CalendarEvent<MeetingDto> = {
               id: meeting.id,
               start: new Date(Utils.createDateFromStringToCalendarFormat(meeting.start)),

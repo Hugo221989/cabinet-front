@@ -33,44 +33,49 @@
     </div>
   </div>
   <br />
-  <div class="containerLoadingSpinner" *ngIf="loadingView"><mat-spinner></mat-spinner></div>
-  <div [ngSwitch]="view" *ngIf="!loadingView">
-    <mwl-calendar-month-view
-      *ngSwitchCase="CalendarView.Month"
-      [viewDate]="viewDate"
-      [events]="appointmentsCalendar"
-      [locale]="locale"
-      [refresh]="refresh"
-      [activeDayIsOpen]="activeDayIsOpen"
-      (dayClicked)="dayClicked($event.day)"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-      (eventTimesChanged)="eventTimesChanged($event)"
-      weekStartsOn="1"
-    >
-    </mwl-calendar-month-view>
-    <mwl-calendar-week-view
-      *ngSwitchCase="CalendarView.Week"
-      [viewDate]="viewDate"
-      [events]="appointmentsCalendar"
-      [locale]="locale"
-      [refresh]="refresh"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-      (eventTimesChanged)="eventTimesChanged($event)"
-      weekStartsOn="1"
-      class="week-view"
-    >
-    </mwl-calendar-week-view>
-    <mwl-calendar-day-view
-      *ngSwitchCase="CalendarView.Day"
-      [viewDate]="viewDate"
-      [events]="appointmentsCalendar"
-      [locale]="locale"
-      [refresh]="refresh"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-      (eventTimesChanged)="eventTimesChanged($event)"
-      class="day-view"
-    >
-    </mwl-calendar-day-view>
+  <!-- <div class="containerLoadingSpinner" *ngIf="loadingView"><mat-spinner></mat-spinner></div> -->
+  <ng-template #loading>
+    <div class="containerLoadingSpinner"><mat-spinner></mat-spinner></div>
+  </ng-template>
+  <div *ngIf="appointmentsCalendar; else loading; let appointments">
+    <div [ngSwitch]="view" *ngIf="!loadingView">
+      <mwl-calendar-month-view
+        *ngSwitchCase="CalendarView.Month"
+        [viewDate]="viewDate"
+        [events]="appointments"
+        [locale]="locale"
+        [refresh]="refresh"
+        [activeDayIsOpen]="activeDayIsOpen"
+        (dayClicked)="dayClicked($event.day)"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+        weekStartsOn="1"
+      >
+      </mwl-calendar-month-view>
+      <mwl-calendar-week-view
+        *ngSwitchCase="CalendarView.Week"
+        [viewDate]="viewDate"
+        [events]="appointments"
+        [locale]="locale"
+        [refresh]="refresh"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+        weekStartsOn="1"
+        class="week-view"
+      >
+      </mwl-calendar-week-view>
+      <mwl-calendar-day-view
+        *ngSwitchCase="CalendarView.Day"
+        [viewDate]="viewDate"
+        [events]="appointments"
+        [locale]="locale"
+        [refresh]="refresh"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+        class="day-view"
+      >
+      </mwl-calendar-day-view>
+    </div>
   </div>
   
   <!-- Everything you see below is just for the demo, you don't need to include it in your app -->
@@ -79,7 +84,7 @@
 
   <h3 *ngIf="!loadingView">
     {{ 'edit.events' | translate }}
-    <button  class="btn primary-button-custom float-right" (click)="addEvent()">
+    <button  class="btn primary-button-custom float-right" (click)="addEvent()" [disabled]="newEventRow">
         {{ 'add.new' | translate }}
     </button>
     <div class="clearfix"></div>
@@ -99,7 +104,7 @@
       </thead>
 
       <tbody>
-        <tr *ngFor="let event of appointmentsCalendar">
+        <tr *ngFor="let event of appointmentsCalendar; let i = index" [ngClass]="(newEventRow && i != 0) ? 'tr-opaque': ''">
           <td class="td-title">
             <input type="text" class="form-control" [(ngModel)]="event.meta.title" (keyup)="refresh.next()" required minlength="4" name="title" #title ="ngModel"/>
           </td>
@@ -119,13 +124,17 @@
           <td>
             <div class="selectLanguageDiv">
                    <div class="selectLanguageCombo">
-                    <mat-select [(ngModel)]="event.meta.idStudent" required name="studentId" #studentId ="ngModel" class="mat-select">
-                      <mat-option  *ngFor="let student of studentList" [value]="student.id">{{ student.name+' '+student.lastName }}</mat-option>
-                    </mat-select>
+                    <!-- <mat-select [(ngModel)]="event.meta.idStudent" required name="studentId" #studentId ="ngModel" class="mat-select">
+                      <mat-option *ngFor="let student of studentList" [value]="student.id">{{ student.name+' '+student.lastName }}</mat-option>
+                    </mat-select> -->
+
+                    <select name="studentId" [(ngModel)]="event.meta.idStudent" #studentId ="ngModel" class="select-appointment">
+                      <option *ngFor="let student of studentList" [value]="student.id">{{ student.name+' '+student.lastName }}</option>
+                      </select>
                 </div>
             </div>
           </td>
-          <td>
+          <td class="actionsDiv">
               <div class="div-icons-actions">
                 <div class="div-icon-left">
                     <a class="actionIcon" (click)="deleteEvent(event)"><i class="material-icons iconoHover md-36 icon-delete">delete</i></a>

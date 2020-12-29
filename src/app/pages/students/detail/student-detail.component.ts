@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DiagnosisDto, StudentDto } from 'src/app/models/student';
@@ -6,6 +6,8 @@ import { StudentsService } from '../service/students.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Utils from 'src/app/utils/utils';
 import { StudentMeetingTableComponent } from '../student-meeting-table/student-meeting-table.component';
+import { StudentsReactiveService } from '../service/students-reactive.service';
+import { StudentsWebsocketService } from '../service/students-websocket.service';
 
 const STUDENTS_LIST_PATH = '/students/list';
 
@@ -25,6 +27,7 @@ export class StudentDetailComponent implements OnInit {
   public birthPickerField = new FormControl(new Date());
   public diagnosisData: DiagnosisDto;
   public isNewStudent: boolean = false;
+  public progress: any = {};
   
   //@ViewChild(StudentMeetingTableComponent, {static: true}) meetingTable: StudentMeetingTableComponent;
 
@@ -32,12 +35,29 @@ export class StudentDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private studentService: StudentsService,
-    private _snackBar: MatSnackBar) { }
+    private studentReactiveService: StudentsReactiveService,
+    private studentWebsocketService: StudentsWebsocketService,
+    private _snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initStudentForm();
     this.initDiagnosisForm();
     this.getUrlParams();
+    // Init Progress WebSocket.
+    this.initProgressWebSocket();
+  }
+  private initProgressWebSocket = () => {
+
+  }
+
+  /**
+   * Apply result of the java server notification to the view.
+   */
+  private onNewProgressMsg = receivedMsg => {
+    if (receivedMsg.type === 'SUCCESS') {
+      this.progress = receivedMsg.message;
+    }
   }
 
   initStudentForm(){
@@ -82,9 +102,10 @@ export class StudentDetailComponent implements OnInit {
 
   getStudentData(){
     this.isNewStudent = false;
-    this.studentService.getStudentData(this.studentId).subscribe( data =>{
+    this.studentReactiveService.getStudentData(this.studentId).subscribe( data =>{
       this.studentData = data;
       this.setStudentForm();
+      this.cdr.detectChanges();
     })
   }
 
@@ -130,9 +151,7 @@ export class StudentDetailComponent implements OnInit {
   }
 
   saveUpdatedStudent(){
-    this.studentService.updateStudent(this.studentData).subscribe(data =>{
-      this.getMessageAfterSave(data);
-    },error => this.openMessageAfterUpdate('Error al actualizar los datos del alumno', ''));
+    this.studentWebsocketService.updateStudent(this.studentData);
   }
 
   saveStudentData(){
@@ -142,9 +161,7 @@ export class StudentDetailComponent implements OnInit {
   }
 
   saveNewStudent(){
-    this.studentService.createStudent(this.studentData).subscribe(data =>{
-      this.getMessageAfterSave(data);
-    },error => this.openMessageAfterUpdate('Error al guardar los datos del nuevo alumno', ''));
+    this.studentWebsocketService.createStudent(this.studentData);
   }
 
   getMessageAfterSave(data: any){
@@ -163,6 +180,26 @@ export class StudentDetailComponent implements OnInit {
       duration: 4000,
       panelClass: ['snackBarStyle']
     });
+  }
+
+  studentToExcel(){
+    const fileName = `reporte_${Math.random()}.xlsx`; 
+    this.studentService.getExcelFromStudent(this.studentId).subscribe(response => {
+      this.manageExcelFile(response, fileName);
+    });
+  }
+
+  manageExcelFile(response: any, fileName: string): void {
+    const dataType = response.type;
+    const binaryData = [];
+    binaryData.push(response);
+
+    const filtePath = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+    const downloadLink = document.createElement('a');
+    downloadLink.href = filtePath;
+    downloadLink.setAttribute('download', fileName);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
   }
 
   listToPdf(){

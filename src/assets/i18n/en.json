@@ -57,5 +57,7 @@
     "confirm.password":"Confirm Password",
     "username":"Nombre de Usuario",
     "username.no.valid":"Nombre de usuario no válido",
-    "pdf":"Pdf"
+    "pdf":"Pdf",
+    "eliminar.cita":"Delete appointment",
+    "deseas.eliminar.cita":"Do you want to delete de appointment?"
 }

@@ -1,3 +1,5 @@
+import {Deserializable} from "./deserializable";
+
 export class MeetingDto {
     id?: number;
     title: string;
@@ -10,6 +12,7 @@ export class MeetingDto {
     mode?: boolean;
     idStudent?: number;
     studentName?: string;
+    
 }
 
 export class MeetingListDto {
@@ -19,6 +22,4 @@ export class MeetingListDto {
 export class MeetingsPage {
     content: MeetingDto[] = [];
     totalElements: number;
-    totalPages: number;
-    number: number;
 }

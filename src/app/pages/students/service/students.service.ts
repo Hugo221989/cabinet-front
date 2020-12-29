@@ -42,7 +42,7 @@ export class StudentsService {
     return this.httpClient.delete<StudentDto>(`${URL_STUDENT}?id=${id}`);
   }
 
-  public getExcel(): Observable<any> {
+  public getExcelFromStudent(studentId: string): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.httpClient.get(`http://localhost:8085/export/getStudentInfoExcel?studentId=1`, { headers, responseType: 'blob' as 'json'});
   }

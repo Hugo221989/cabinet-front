@@ -33,7 +33,7 @@ export class StudentsComponent implements OnInit, OnDestroy {
 
   //@ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private studentService: StudentsReactiveService, 
+  constructor(private studentReactiveService: StudentsReactiveService, 
     private router: Router, 
     public translate: TranslateService, 
     private cdr: ChangeDetectorRef) { }
@@ -49,7 +49,7 @@ export class StudentsComponent implements OnInit, OnDestroy {
   }
 
   getStudentsPage(){
-    this.studentService.getStudentPage(this.currentPage, this.pageSizeSelected, this.textToSearch).subscribe( data => { 
+    this.studentReactiveService.getStudentPage(this.currentPage, this.pageSizeSelected, this.textToSearch).subscribe( data => { 
       this.studentPage = data;
       this.setTableDataSource();   
       this.cdr.detectChanges();
@@ -129,9 +129,9 @@ export class StudentsComponent implements OnInit, OnDestroy {
 
   listToExcel(){
     const fileName = `reporte_${Math.random()}.xlsx`;
-    /* this.studentService.getExcel().subscribe(response => {
+    this.studentReactiveService.getExcelFromList().subscribe(response => {
       this.manageExcelFile(response, fileName);
-    }); */
+    });
   }
 
   manageExcelFile(response: any, fileName: string): void {

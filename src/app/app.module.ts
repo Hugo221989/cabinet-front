@@ -22,6 +22,10 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { authInterceptorProviders } from './interceptors/auth-interceptor';
 import { SettingsEffect } from './settings/settings.effects';
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+/* import { progressStompConfig, ProgressWebsocketService } from './my-rx-stomp.config';
+import { StompConfig } from '@stomp/stompjs'; */
+import { StudentsWebsocketService } from './pages/students/service/students-websocket.service';
 
 registerLocaleData(localeEs);
 
@@ -61,7 +65,9 @@ registerLocaleData(localeEs);
     I18nModule
   ],
   providers: [
-    authInterceptorProviders
+    authInterceptorProviders,
+    RxStompService,
+    StudentsWebsocketService
   ],
   bootstrap: [AppComponent]
 })

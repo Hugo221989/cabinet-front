@@ -59,7 +59,7 @@ export class RegisterFormComponent implements OnInit {
     });
  }
 
-  async onSubmit() {console.log(this.registerform);
+  async onSubmit() {
     //this.emailExist = true;
     let userReg = {
       username: this.registerform.value.username,

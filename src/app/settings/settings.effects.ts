@@ -31,7 +31,7 @@ export class SettingsEffect{
         this.actions$.pipe(
                 ofType(actionSettingsIsAuthenticated),
                 withLatestFrom(this.store.pipe(select(selectSettingsisAuthenticated))),
-                tap(([action, settings]) =>{ console.log("EFFECT AUTH: ",action.isAuthenticated);
+                tap(([action, settings]) =>{
                     //if(!action.isAuthenticated)
                         //window.sessionStorage.clear();
                 }

@@ -7,21 +7,21 @@ import { TranslateService } from '@ngx-translate/core';
 import { CustomDateFormatter } from '../custom-date-formatter/custom-date-formatter.provider';
 import { Spanish } from "flatpickr/dist/l10n/es.js"
 import flatpickr from 'flatpickr';
-import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { SettingsState } from 'src/app/settings/settings.models';
 import { selectSettingsCurrentLanguage } from 'src/app/settings/settings.selectors';
-import { AppointmentsService } from '../service/appointments.service';
-import { MeetingDto, MeetingListDto } from 'src/app/models/meeting';
+import { MeetingDto } from 'src/app/models/meeting';
 import Helper from './appointments-list-helper';
 import { CustomEventTitleFormatter } from '../custom-title-formatter/custom-title-formatter-provider';
-import { StudentsService } from '../../students/service/students.service';
 import { StudentDto } from 'src/app/models/student';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
-import { MeetingFormDialog } from '../meeting-form-dialog/meeting-form-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { StudentsReactiveService } from '../../students/service/students-reactive.service';
+import { AppointmentReactiveService } from '../service/appointment-reactive.service';
+import { AppointmentWebsocketService } from '../service/appointment-websocket.service';
+import { MeetingFormDialog } from '../../form-dialog/meeting-form-dialog/meeting-form-dialog';
+import { DeleteMeetingDialogComponent } from '../../form-dialog/delete-meeting-dialog/delete-meeting-dialog.component';
 
 @Component({
   selector: 'app-appointments-list',
@@ -51,8 +51,9 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
   private subscription: Subscription[] = [];
   public loadingView = false;
   public appointmentsCalendar: CalendarEvent[];
-  public studentList: StudentDto[];
-  studentSelected: any;
+  public studentList: Observable<StudentDto[]>;
+  public studentSelected: any;
+  public newEventRow: boolean = false;
 
   modalData: {
     action: string;
@@ -83,33 +84,35 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
   ngOnInit(){
     flatpickrFactory();
     this.setLanguageSelected();
-    this.getAllApointments();
     this.getAllStudents();
+    this.getAllApointments();
   }
 
-  constructor(public translate: TranslateService, 
-              private modal: NgbModal,
+  constructor(public translate: TranslateService,
               private store: Store<{settings: SettingsState}>,
-              private router: Router,
-              private appointmentsService: AppointmentsService,
-              private studentsService: StudentsReactiveService,
+              private appointmentReactiveService: AppointmentReactiveService,
+              private appointmentWebsocketService: AppointmentWebsocketService,
+              private studentReactiveService: StudentsReactiveService,
               private _snackBar: MatSnackBar,
               public datepipe: DatePipe,
               public dialog: MatDialog,
               private cdr: ChangeDetectorRef) {}
 
   getAllApointments() {
-    this.appointmentsService.getAllMeetings().subscribe( data => {
-      this.appointmentsCalendar = [];
+    this.appointmentsCalendar = [];
+    //this.appointmentReactiveService.getAllMeetings().subscribe( data => {
+      this.appointmentReactiveService._meetingsWatchSource.subscribe( data => {
       this.fillApointmentsCalendar(data);
+      this.cdr.detectChanges();
+      this.refresh.next();
     })
   }
   
-  fillApointmentsCalendar(meetings: MeetingListDto){
-    this.appointmentsCalendar = Helper.fillApointmentsCalendar(meetings, this.appointmentsCalendar, this.actions);
+  fillApointmentsCalendar(meeting: MeetingDto){
+    this.appointmentsCalendar = Helper.fillApointmentsCalendar(meeting, this.appointmentsCalendar, this.actions);
   }
 
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {console.log("dayClicked");
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -138,10 +141,10 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
       }
       return iEvent;
     });
-    this.handleEvent('Dropped or resized', event);console.log("eventTimesChanged");
+    this.handleEvent('Dropped or resized', event);
   }
 
-  handleEvent(action: string, event: CalendarEvent): void {console.log("handleEvent: ",event);
+  handleEvent(action: string, event: CalendarEvent): void {
     /* this.modalData = { event, action };
     this.modal.open(this.modalContent, { size: 'lg' }); */
     this.openMeetingModal(event);
@@ -149,7 +152,6 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
 
   addEvent(): void {
     this.appointmentsCalendar = [
-      ...this.appointmentsCalendar,
       {
         title: '',
         start: startOfDay(new Date()),
@@ -173,7 +175,9 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
           studentName: '',
         }
       },
+      ...this.appointmentsCalendar,
     ];
+    this.newEventRow = true;
   }
 
   saveEvent(event: any){
@@ -185,26 +189,23 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateEvent(meeting: MeetingDto){
-    this.appointmentsService.updateStudentMeeeting(meeting).subscribe(data =>{
-      this.getMessageAfterSave(data);
-    },error => this.openMessageAlert('Error al actualizar el evento', ''));
+  updateEvent(appointment: MeetingDto){
+    this.appointmentWebsocketService.updateStudentMeeeting(appointment);
   }
 
-  createEvent(meeting: MeetingDto){ 
-    this.appointmentsService.createStudentMeeting(meeting).subscribe(data =>{
-      this.getMessageAfterSave(data);
-    },error => this.openMessageAlert('Error al crear el evento', ''));
-  }
-
-  getMessageAfterSave(data: any){
-    if(data){
-      let status = data.status;
-      if(status != 200 && status != 204)this.openMessageAlert('Error al guardar los datos', '');
-      else this.openMessageAlert('Cambios guardados correctamente', '');
+  createEvent(appointment: MeetingDto){ 
+    if(null == appointment.id){
+      this.newEventRow = false;
     }
+    this.appointmentWebsocketService.createStudentMeeting(appointment);
+    let reloadList = this.appointmentReactiveService.getAllMeetings().subscribe(data => {
+      this.fillApointmentsCalendar(data);
+      this.cdr.detectChanges();
+      this.refresh.next();
+    });
+    reloadList.unsubscribe();
   }
-  
+
   openMessageAlert(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4000,
@@ -214,12 +215,31 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
 
   deleteEvent(eventToDelete: CalendarEvent) {
     if(null == eventToDelete.id){
+      console.log("handleEvent()");
+      this.newEventRow = false;
       this.appointmentsCalendar = this.appointmentsCalendar.filter((event) => event !== eventToDelete);
       return;
     }
-    this.appointmentsService.deleteStudentMeeting(eventToDelete.id).subscribe(data =>{
-      this.getMessageAfterDelete(data, eventToDelete);
-    },error => this.openMessageAlert('Error al eliminar el evento', ''));
+    this.openDeleteConfirmationModal(eventToDelete);
+  }
+
+  openDeleteConfirmationModal(eventToDelete: CalendarEvent){
+    const dialogRef = this.dialog.open(DeleteMeetingDialogComponent, {
+      width: '20%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.appointmentReactiveService.deleteStudentMeeting(eventToDelete.id).subscribe( data =>{
+          this.getMessageAfterDelete(data, eventToDelete);console.log("DATA: "+data);
+          this.fillApointmentsCalendar(data);
+          this.cdr.detectChanges();
+          this.refresh.next();
+        });
+      }else{
+        dialogRef.close();
+      }
+    });
   }
 
   getMessageAfterDelete(data: any, eventToDelete: CalendarEvent){
@@ -295,8 +315,9 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
   }
 
   getAllStudents(){
-    this.studentsService.getStudentList().subscribe( data => {
-      this.studentList = data.studentList;
+    this.studentReactiveService.getStudentList().subscribe( data => {
+      this.studentList = data;
+      this.cdr.detectChanges();
     })
   }
 

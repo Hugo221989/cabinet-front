@@ -19,8 +19,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatDialogModule} from '@angular/material/dialog';
-import { MeetingFormDialog } from './meeting-form-dialog/meeting-form-dialog';
 import { MatInputModule } from '@angular/material/input';
+import { FormDialogModule } from '../form-dialog/form-dialog.module';
 
 registerLocaleData(localeEs);
 registerLocaleData(localeEn);
@@ -28,7 +28,7 @@ registerLocaleData(localeEn);
 const userDefaults: FlatpickrDefaultsInterface = {locale: Spanish};userDefaults.utc = true;
 
 @NgModule({
-  declarations: [AppointmentsListComponent, MeetingFormDialog],
+  declarations: [AppointmentsListComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -48,7 +48,8 @@ const userDefaults: FlatpickrDefaultsInterface = {locale: Spanish};userDefaults.
     MatSelectModule,
     MatFormFieldModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    FormDialogModule
     ],
   exports: [
     AppointmentsListComponent

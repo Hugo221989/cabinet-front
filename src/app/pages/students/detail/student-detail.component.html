@@ -51,10 +51,21 @@
         <app-student-meeting-table [studentId]="studentId"></app-student-meeting-table>
     </mat-card>
 
-    <div class="button-row">
+    <!-- <div class="button-row">
         <div class="div-button-pdf">
             <button mat-flat-button color="accent" (click)="listToPdf()" > <mat-icon class="sectionIcon">picture_as_pdf</mat-icon> {{ 'pdf' | translate }}</button>
           </div>
+    </div> -->
+
+    <div class="button-row">
+        <div class="div-button-pdf">
+          <a (click)="listToPdf()" class="icon-export">
+            <img src="assets/icon/pdf.png" class="mainIcon">
+          </a>
+          <a (click)="studentToExcel()" class="icon-export">
+            <img src="assets/icon/excel.png" class="mainIcon">
+          </a>
+        </div>
     </div>
     <div class="button-row">
         <button mat-flat-button class="buttonCancel" routerLink="/students/list">{{ 'cancel' | translate }}</button>

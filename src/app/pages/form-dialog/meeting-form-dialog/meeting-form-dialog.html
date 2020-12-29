@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Hi {{data.title}}</h1>
+<h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
   <p>{{ 'info.evento' | translate }}</p>
   <mat-form-field class="form-field-50">
@@ -15,20 +15,20 @@
     <mat-label>{{ 'location' | translate }}</mat-label>
     <input matInput [(ngModel)]="meetingDialog.meta.location">
   </mat-form-field>
-  <div>
+  <div *ngIf="meetingDialog.color.primary != null && meetingDialog.color.primary != ''">
     <mat-label>{{ 'color' | translate }}</mat-label>
     <p></p>
-    <input type="color" [(ngModel)]="meetingDialog.color.primary" class="color-square"/>
+    <input type="color" [(ngModel)]="meetingDialogRecieved.color.primary" class="color-square"/>
     <p></p>
   </div>
-  <div class="row div-modal-dates">
+  <div class="row div-modal-dates" *ngIf="meetingDialog.start != null">
     <div class="form-field-date-modal mr-2">
         <mat-label>{{ 'starts.at' | translate }}</mat-label>
         <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="meetingDialog.start" (ngModelChange)="refresh.next()"
                 [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="dd-mm-YYYY HH:mm" altFormat="d-m-Y H:i" date-time_24hr=true
                 placeholder="Not set" [locale]="locale" required name="start" #start ="ngModel"/>
     </div>
-    <div class="form-field-date-modal">
+    <div class="form-field-date-modal" *ngIf="meetingDialog.end != null">
         <mat-label>{{ 'ends.at' | translate }}</mat-label>
         <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="meetingDialog.end" (ngModelChange)="refresh.next()"
                 [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="dd-mm-YYYY HH:mm" altFormat="d-m-Y H:i" date-time_24hr=true

@@ -41,13 +41,17 @@ export class AuthGuardGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> {
       this.isLoggedIn = true;
 
+      this.store.dispatch(actionSettingsIsAuthenticated({
+        isAuthenticated: true
+      }))
+
     if (this.isLoggedIn) {
         this.store.dispatch(actionSettingsIsAuthenticated({
           isAuthenticated: true
         }))
       }else{
-        this.tokenStorageService.signOut();
-        this.router.navigate([LOGIN_PATH]);
+        /* this.tokenStorageService.signOut(); 
+        this.router.navigate([LOGIN_PATH]); */
       }
       return this.store.pipe(select(selectSettingsisAuthenticated));
   }
